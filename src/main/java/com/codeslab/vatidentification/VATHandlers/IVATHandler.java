@@ -1,0 +1,16 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+// Created by AMundewal on 07.05.2023.
+//
+// Copyright (c) 2006 - 2023 FORCAM GmbH. All rights reserved.
+////////////////////////////////////////////////////////////////////////////////
+
+package com.codeslab.vatidentification.VATHandlers;
+
+/**
+ *
+ */
+public interface IVATHandler {
+
+    boolean isVATIDValid(String vatID);
+}
