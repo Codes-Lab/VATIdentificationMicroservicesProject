@@ -11,6 +11,8 @@ import java.util.Set;
  *
  */
 @RestController
+//Allows the Cross Origin requests to the controller.
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/customers")
 public class VATAPIRestController {
 
@@ -29,7 +31,7 @@ public class VATAPIRestController {
         return mVATAPIService.getAllVATCountries();
     }
 
-    @RequestMapping(value = "/getAllCountries", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/delete", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public boolean deleteVATCountry(@RequestParam("country") String country) {
         return mVATAPIService.deleteVATCountry(country);
