@@ -2,6 +2,7 @@ package com.codeslab.vatidentification.service;
 
 import com.codeslab.vatidentification.VATHandlers.GenericVATHandler;
 import com.codeslab.vatidentification.VATHandlers.IVATHandler;
+import com.codeslab.vatidentification.exception.BadRequestException;
 import com.codeslab.vatidentification.persistence.IVATCountryRepository;
 import com.codeslab.vatidentification.persistence.VATCountry;
 import org.slf4j.Logger;
@@ -42,6 +43,10 @@ public class VATAPIService implements IVATAPIService {
         }
     }
 
+    private void createVATHandler(VATCountry vatCountry) {
+        mCountriesVATHandlersMap.put(vatCountry.getCode(), new GenericVATHandler(vatCountry.getVATFormat()));
+    }
+
     private boolean isRegexValid(String regex) {
         return regex.matches("^[A-Z].*");
     }
@@ -60,7 +65,7 @@ public class VATAPIService implements IVATAPIService {
     }
 
     @Override
-    public Set<String> getAllVATCountries() {
+    public Set<String> getAllVATCountries() throws BadRequestException {
         if (mCountriesVATHandlersMap.isEmpty()) {
             this.initialize();
         }
@@ -68,23 +73,42 @@ public class VATAPIService implements IVATAPIService {
     }
 
     @Override
-    public boolean deleteVATCountry(String country) {
+    public boolean deleteVATCountry(String country) throws BadRequestException {
         if (mCountriesVATHandlersMap.isEmpty()) {
             this.initialize();
         }
-        if (mCountriesVATHandlersMap.get(country) != null) {
-            mCountriesVATHandlersMap.remove(country);
-            return true;
-        } else {
-            return false;
+        try {
+            if (mCountriesVATHandlersMap.get(country) != null) {
+                ivatCountryRepository.deleteByName(country);
+                mCountriesVATHandlersMap.remove(country);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            throw new BadRequestException("Something went wrong.", ex);
         }
     }
 
     @Override
-    public boolean addVATCountry(String country, String regex) {
+    public boolean addVATCountry(String country, String countryCode, String regex) throws BadRequestException {
         if (mCountriesVATHandlersMap.isEmpty()) {
             this.initialize();
         }
-        return false;
+
+        try {
+            final VATCountry byCode = ivatCountryRepository.findByCode(countryCode);
+            if (byCode != null) {
+                throw new BadRequestException("Cannot create duplicate records.");
+            }
+            final VATCountry saved = ivatCountryRepository.saveAndFlush(new VATCountry(country, countryCode, regex));
+            if (saved.getId() > 0L) {
+                this.createVATHandler(saved);
+                return true;
+            }
+            return false;
+        } catch (Exception ex) {
+            throw new BadRequestException("Something went wrong.", ex);
+        }
     }
 }

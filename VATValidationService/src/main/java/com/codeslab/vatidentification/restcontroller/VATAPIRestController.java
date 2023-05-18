@@ -39,8 +39,10 @@ public class VATAPIRestController {
 
     @GetMapping(value = "/addcountry")
     @ResponseBody
-    public boolean addNewVATCountryWithRegex(@RequestParam("country") String country, @RequestParam("regex") String regex) {
-        return mVATAPIService.addVATCountry(country, regex);
+    public boolean addNewVATCountryWithRegex(@RequestParam("country") String country,
+                                             @RequestParam("countryCode") String countryCode,
+                                             @RequestParam("regex") String regex) {
+        return mVATAPIService.addVATCountry(country, countryCode, regex);
     }
 
 }

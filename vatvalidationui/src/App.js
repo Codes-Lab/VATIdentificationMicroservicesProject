@@ -1,13 +1,11 @@
 import './App.css';
-import { VATStatusComponent } from './components/VATStatusComponent';
-import VATValidationUI from './components/VATValidationUI';
+import { MainComponent } from './components/MainComponent';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-       <VATValidationUI></VATValidationUI>
-       <VATStatusComponent></VATStatusComponent>
+       <MainComponent></MainComponent>
       </header>
     </div>
   );

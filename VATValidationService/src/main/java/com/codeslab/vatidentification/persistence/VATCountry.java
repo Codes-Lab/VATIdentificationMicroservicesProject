@@ -1,10 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// Created by AMundewal on 14.05.2023.
-//
-// Copyright (c) 2006 - 2023 FORCAM GmbH. All rights reserved.
-////////////////////////////////////////////////////////////////////////////////
-
 package com.codeslab.vatidentification.persistence;
 
 import jakarta.persistence.*;
@@ -24,12 +17,21 @@ public class VATCountry implements Serializable {
     private static final long serialVersionUID = -7994401085596069960L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     private String name;
     private String code;
     @Column(name = "VAT_FORMAT")
     private String VATFormat;
+
+    public VATCountry() {
+    }
+
+    public VATCountry(String name, String code, String VATFormat) {
+        this.name = name;
+        this.code = code;
+        this.VATFormat = VATFormat;
+    }
 
     @Column(name = "ID")
     public Long getId() {
