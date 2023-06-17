@@ -6,35 +6,34 @@ import { DeleteCountryForm } from './DeleteCountryForm';
 import { VAT_COUNTRIES_LIST } from '../backendapi';
 import axios from 'axios';
 
-const label = { inputProps: { 'aria-label': 'Color switch demo' } };
-
 export const MainComponent = () => {
     const [vatCountries, setVatCountries] = React.useState();
     const [isAddCountrySwitch, setAddCountrySwitch] = useState(false);
     const [isDeleteCountrySwitch, setDeleteCountrySwitch] = useState(false);
 
-    const handleAddCountry = (event) => {
-        setAddCountrySwitch(event.target.checked);
+    const handleAddCountry = () => {
+        setAddCountrySwitch(!isAddCountrySwitch);  
     };
 
-    const handleDeleteCountry = async (event) => {
+    const handleDeleteCountry = async () => {
         try {
+            console.log("delete countries")
             const response = await axios.get(VAT_COUNTRIES_LIST);
             setVatCountries(response.data);
         } catch (error) {
             console.error('Error fetching countries:', error);
         }
-        setDeleteCountrySwitch(event.target.checked);
+        setDeleteCountrySwitch(!isDeleteCountrySwitch);
     };
 
     return (
         <div>
            <FormGroup>
-                <FormControlLabel control={<Switch />} label="Add new Country"  disabled={isDeleteCountrySwitch} onChange={handleAddCountry}/>
-                <FormControlLabel control={<Switch />} label="Delete Country"  disabled={isAddCountrySwitch} onChange={handleDeleteCountry}/>
+                <FormControlLabel control={<Switch checked={isAddCountrySwitch}/>} label="Add new Country"  disabled={isDeleteCountrySwitch} onChange={handleAddCountry}/>
+                <FormControlLabel control={<Switch checked={isDeleteCountrySwitch}/>} label="Delete Country"  disabled={isAddCountrySwitch} onChange={handleDeleteCountry}/>
                 {
                     isAddCountrySwitch ? (
-                        <AddCountryForm />
+                        <AddCountryForm handleAddCountry = {handleAddCountry}/>
                     ) : (
                         isDeleteCountrySwitch ? (
                             <DeleteCountryForm vatCountries={vatCountries}/>

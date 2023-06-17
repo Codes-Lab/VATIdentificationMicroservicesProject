@@ -8,7 +8,7 @@ import { VATStatusComponent } from './VATStatusComponent';
 
 function VATValidationUI() {
     const [vatCountries, setVatCountries] = React.useState();
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [isLoaded, setIsLoaded] = React.useState(false);
     const [country, setCountry] = React.useState('');
     const [VAT_ID, setVAT_ID] = React.useState('');
     const [IsSubmitted, setIsSubmitted] = React.useState(false);
@@ -19,12 +19,15 @@ function VATValidationUI() {
     React.useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get(VAT_COUNTRIES_LIST);
-            setVatCountries(response.data);
-            setIsLoading(false);
+            const response = await axios.get(VAT_COUNTRIES_LIST).then((response) => {
+                setVatCountries(response.data);
+                setIsLoaded(true);
+            }).catch((error) => {
+                console.log("Opps! that's not suppose to happen. The backend-service could be down.");
+            })
           } catch (error) {
             console.error('Error fetching countries:', error);
-            setIsLoading(false);
+            setIsLoaded(false);
           }
         };
     
@@ -71,7 +74,7 @@ function VATValidationUI() {
             <div>
 
             {
-                isLoading ? ( <p>Loading countries...</p>) 
+                !isLoaded ? ( <p>Loading countries...</p>) 
                     : ( 
                         <FormControl sx={{ m: 1, minWidth: 120 }}>
                             <InputLabel id="country-select-label">Country</InputLabel>

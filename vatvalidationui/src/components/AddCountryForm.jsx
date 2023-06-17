@@ -3,7 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import { ADD_VAT_COUNTRY } from '../backendapi';
 
-export const AddCountryForm = () => {
+export const AddCountryForm = (props) => {
     const [country, setCountry] = React.useState('');
     const [countryCode, setCountryCode] = React.useState('');
     const [vatRegex, setVatRegex] = React.useState('');
@@ -24,8 +24,8 @@ export const AddCountryForm = () => {
     };
 
 
-    const handleAdd = async (event) => {
-        const URL_WITH_QUERY_PARAMS = ADD_VAT_COUNTRY + "?" + "country=" + country + "&countryCode=" + countryCode + "&regex=" + vatRegex;
+    const handleAdd = async () => {
+        const URL_WITH_QUERY_PARAMS = `${ADD_VAT_COUNTRY}?country=${country}&countryCode=${countryCode}&regex=${vatRegex}`;
         try {
             const response = await axios.get(URL_WITH_QUERY_PARAMS);
             setSuccess(response.data);
@@ -36,6 +36,7 @@ export const AddCountryForm = () => {
         }
         setAddAttempted(true);
     }
+
     return (
         <>
             <div>
@@ -47,6 +48,8 @@ export const AddCountryForm = () => {
                     <TextField id="VAT-Regex" label="VAT-Regex" variant="outlined" value={vatRegex} onChange={handleVatRegexChange}/>
                     <div style={{ margin: '6.8px' }} />
                     <Button variant="outlined" onClick={handleAdd}>Add</Button>
+                    <div style={{ margin: '3.8px' }} />
+                    <Button variant="outlined" onClick={props.handleAddCountry}>Home</Button>
                 </FormControl>
             </div>
             <div>
