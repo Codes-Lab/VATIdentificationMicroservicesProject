@@ -1,5 +1,3 @@
-Certainly! Here's an example of a README file for your VAT validation microservice application:
-
 # VAT Validation Microservice
 
 The VAT Validation Microservice is a web application consisting of two parts: a backend service and a frontend validation UI. The microservice allows users to validate VAT-IDs (Value Added Tax Identification Numbers) against the official EU VAT Information Exchange System (VIES) database.
